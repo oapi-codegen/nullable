@@ -14,7 +14,7 @@ And can be embedded in structs, for instance with the following definition:
 obj := struct {
 		// RequiredID is a required, nullable field
 		RequiredID     nullable.Nullable[int]     `json:"id"`
-		// RequiredID is an optional, nullable field
+		// OptionalString is an optional, nullable field
 		OptionalString *nullable.Nullable[string] `json:"optionalString,omitempty"`
 }{}
 ```
