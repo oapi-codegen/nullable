@@ -34,7 +34,7 @@ Check out the examples in [the package documentation on pkg.go.dev](https://pkg.
 
 ## Credits
 
-- [KumanekoSakura](https://github.com/KumanekoSakura), [via](https://github.com/golang/go/issues/64515#issuecomment-1841057182)
+- [KumanekoSakura](https://github.com/KumanekoSakura), [via](https://github.com/golang/go/issues/64515#issuecomment-1842973794)
 - [Sebastien Guilloux](https://github.com/sebgl), [via](https://github.com/sebgl/nullable/)
 
 As well as contributions from:
