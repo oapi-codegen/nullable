@@ -26,6 +26,7 @@ func TestNullable(t *testing.T) {
 	value, err := myObj.Foo.Get()
 	require.NoError(t, err)
 	require.Equal(t, "bar", value)
+	require.Equal(t, "bar", myObj.Foo.MustGet())
 	// serialize back to json: leads to the same data
 	require.Equal(t, data, serialize(myObj, t))
 
@@ -50,6 +51,7 @@ func TestNullable(t *testing.T) {
 	require.True(t, myObj.Foo.IsSpecified())
 	_, err = myObj.Foo.Get()
 	require.ErrorContains(t, err, "value is null")
+	require.Panics(t, func() { myObj.Foo.MustGet() })
 	// serialize back to json: leads to the same data
 	require.Equal(t, data, serialize(myObj, t))
 

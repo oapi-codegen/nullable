@@ -51,6 +51,15 @@ func (t Nullable[T]) Get() (T, error) {
 	return t[true], nil
 }
 
+// MustGet retrieves the underlying value, if present, and panics if the value was not present
+func (t Nullable[T]) MustGet() T {
+	v, err := t.Get()
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
 // Set sets the underlying value to a given value
 func (t *Nullable[T]) Set(value T) {
 	*t = map[bool]T{true: value}
