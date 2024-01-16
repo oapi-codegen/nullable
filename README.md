@@ -15,7 +15,7 @@ obj := struct {
 		// RequiredID is a required, nullable field
 		RequiredID     nullable.Nullable[int]     `json:"id"`
 		// OptionalString is an optional, nullable field
-		// NOTE that no pointer is required, only `omiempty`
+		// NOTE that no pointer is required, only `omitempty`
 		OptionalString nullable.Nullable[string] `json:"optionalString,omitempty"`
 }{}
 ```
