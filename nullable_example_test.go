@@ -252,6 +252,7 @@ func ExampleNullable_unmarshalRequired() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
 	// when it's set explicitly to a specific value
@@ -274,6 +275,7 @@ func ExampleNullable_unmarshalRequired() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
 	// Output:
@@ -289,11 +291,13 @@ func ExampleNullable_unmarshalRequired() {
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "" <nil>
+	// obj.Name.MustGet(): ""
 	// ---
 	// Value:
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "foo" <nil>
+	// obj.Name.MustGet(): "foo"
 	// ---
 }
 
@@ -351,6 +355,7 @@ func ExampleNullable_unmarshalOptional() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
 	// when it's set explicitly to a specific value
@@ -373,6 +378,7 @@ func ExampleNullable_unmarshalOptional() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
 	// Output:
@@ -388,10 +394,12 @@ func ExampleNullable_unmarshalOptional() {
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "" <nil>
+	// obj.Name.MustGet(): ""
 	// ---
 	// Value:
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "foo" <nil>
+	// obj.Name.MustGet(): "foo"
 	// ---
 }
