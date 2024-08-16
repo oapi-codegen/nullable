@@ -4,6 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"reflect"
+
+	"gopkg.in/yaml.v3"
 )
 
 // Nullable is a generic type, which implements a field that can be one of three states:
@@ -112,6 +116,52 @@ func (t *Nullable[T]) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
+	t.Set(v)
+	return nil
+}
+
+// TODO pointer receiver https://github.com/go-yaml/yaml/issues/134#issuecomment-2044424851
+func (t Nullable[T]) MarshalYAML() (interface{}, error) {
+	fmt.Println("MarshalYAML")
+	// if field was specified, and `null`, marshal it
+	if t.IsNull() {
+		return []byte("null"), nil
+	}
+
+	// if field was unspecified, and `omitempty` is set on the field's tags, `json.Marshal` will omit this field
+
+	// otherwise: we have a value, so marshal it
+	// fmt.Printf("t[true]: %v\n", t[true])
+	// b, _ := yaml.Marshal(t[true])
+	// fmt.Printf("b: %v\n", b)
+	// return yaml.Marshal(t[true])
+	vv := (t)[true]
+	fmt.Printf("vv: %v\n", vv)
+	fmt.Printf("reflect.ValueOf(vv): %v\n", reflect.ValueOf(vv))
+	return json.Marshal(t[true])
+}
+
+func (t *Nullable[T]) UnmarshalYAML(value *yaml.Node) error {
+	// if field is unspecified, UnmarshalJSON won't be called
+	// fmt.Printf("value: %v\n", value)
+	// value.Kind == yaml.Kind
+
+	fmt.Printf("value: %v\n", value)
+	fmt.Printf("value.Tag: %v\n", value.Tag)
+
+	//////	// if field is specified, and `null`
+	//////	if bytes.Equal(data, []byte("null")) {
+	//////		t.SetNull()
+	//////		return nil
+	//////	}
+	// otherwise, we have an actual value, so parse it
+	var v T
+
+	fmt.Printf("reflect.TypeOf(v): %v\n", reflect.TypeOf(v))
+	if err := value.Decode(&v); err != nil {
+		return err
+	}
+	fmt.Printf("v: %v\n", v)
 	t.Set(v)
 	return nil
 }
