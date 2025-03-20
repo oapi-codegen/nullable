@@ -252,6 +252,7 @@ func ExampleNullable_unmarshalRequired() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.GetOrEmpty(): %#v\n", obj.Name.GetOrEmpty())
 	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
@@ -275,6 +276,7 @@ func ExampleNullable_unmarshalRequired() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.GetOrEmpty(): %#v\n", obj.Name.GetOrEmpty())
 	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
@@ -291,12 +293,14 @@ func ExampleNullable_unmarshalRequired() {
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "" <nil>
+	// obj.Name.GetOrEmpty(): ""
 	// obj.Name.MustGet(): ""
 	// ---
 	// Value:
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "foo" <nil>
+	// obj.Name.GetOrEmpty(): "foo"
 	// obj.Name.MustGet(): "foo"
 	// ---
 }
@@ -355,6 +359,7 @@ func ExampleNullable_unmarshalOptional() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.GetOrEmpty(): %#v\n", obj.Name.GetOrEmpty())
 	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
@@ -378,6 +383,7 @@ func ExampleNullable_unmarshalOptional() {
 		return
 	}
 	fmt.Printf("obj.Name.Get(): %#v <nil>\n", val)
+	fmt.Printf("obj.Name.GetOrEmpty(): %#v\n", obj.Name.GetOrEmpty())
 	fmt.Printf("obj.Name.MustGet(): %#v\n", obj.Name.MustGet())
 	fmt.Println("---")
 
@@ -394,12 +400,14 @@ func ExampleNullable_unmarshalOptional() {
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "" <nil>
+	// obj.Name.GetOrEmpty(): ""
 	// obj.Name.MustGet(): ""
 	// ---
 	// Value:
 	// obj.Name.IsSpecified(): true
 	// obj.Name.IsNull(): false
 	// obj.Name.Get(): "foo" <nil>
+	// obj.Name.GetOrEmpty(): "foo"
 	// obj.Name.MustGet(): "foo"
 	// ---
 }
