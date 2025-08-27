@@ -1,6 +1,6 @@
 # oapi-codegen/nullable
 
-> An implementation of a `Nullable` type for JSON bodies, indicating whether the field is absent, set to null, or set to a value
+> An implementation of a `Value` (formerly `Nullable`) type for JSON bodies, indicating whether the field is absent, set to null, or set to a value
 
 Unlike other known implementations, this makes it possible to both marshal and unmarshal the value, as well as represent all three states:
 
@@ -13,10 +13,10 @@ And can be embedded in structs, for instance with the following definition:
 ```go
 obj := struct {
 		// RequiredID is a required, nullable field
-		RequiredID     nullable.Nullable[int]     `json:"id"`
+		RequiredID     nullable.Value[int]     `json:"id"`
 		// OptionalString is an optional, nullable field
 		// NOTE that no pointer is required, only `omitempty`
-		OptionalString nullable.Nullable[string] `json:"optionalString,omitempty"`
+		OptionalString nullable.Value[string] `json:"optionalString,omitempty"`
 }{}
 ```
 
@@ -32,6 +32,22 @@ go get github.com/oapi-codegen/nullable
 ```
 
 Check out the examples in [the package documentation on pkg.go.dev](https://pkg.go.dev/github.com/oapi-codegen/nullable) for more details.
+
+## Migration note
+
+- `nullable.Nullable[T]` is still available but deprecated.
+- Prefer `nullable.Value[T]` going forward.
+- Constructors are provided for both:
+
+```go
+// Preferred
+n := nullable.NewValue(123)
+nNull := nullable.NewNullValue[int]()
+
+// Deprecated, still available
+o := nullable.NewNullableWithValue(123)
+oNull := nullable.NewNullNullable[int]()
+```
 
 ## Credits
 

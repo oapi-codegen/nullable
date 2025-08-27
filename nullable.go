@@ -23,20 +23,125 @@ import (
 // If the field is expected to be optional, add the `omitempty` JSON tags. Do NOT use `*Nullable`!
 //
 // Adapted from https://github.com/golang/go/issues/64515#issuecomment-1841057182
+//
+// Deprecated: Nullable has been renamed to Value. Use Value[T] instead.
 type Nullable[T any] map[bool]T
 
+// Value is the preferred name for Nullable. It represents a tri-state JSON field:
+// unspecified, null, or a concrete value.
+//
+// This is a separate named type for compatibility with older Go versions.
+type Value[T any] map[bool]T
+
 // NewNullableWithValue is a convenience helper to allow constructing a `Nullable` with a given value, for instance to construct a field inside a struct, without introducing an intermediate variable
+//
+// Deprecated: Use NewValue instead.
 func NewNullableWithValue[T any](t T) Nullable[T] {
 	var n Nullable[T]
 	n.Set(t)
 	return n
 }
 
+// NewValue is a convenience helper to construct a nullable `Value`,
+// for instance to construct a field inside a struct, without introducing an intermediate variable.
+func NewValue[T any](t T) Value[T] {
+	var n Value[T]
+	n.Set(t)
+	return n
+}
+
 // NewNullNullable is a convenience helper to allow constructing a `Nullable` with an explicit `null`, for instance to construct a field inside a struct, without introducing an intermediate variable
+//
+// Deprecated: Use NewNullValue instead.
 func NewNullNullable[T any]() Nullable[T] {
 	var n Nullable[T]
 	n.SetNull()
 	return n
+}
+
+// NewNullValue is a convenience helper to construct a `Value` with an explicit `null`,
+// for instance to construct a field inside a struct, without introducing an intermediate variable.
+func NewNullValue[T any]() Value[T] {
+	var n Value[T]
+	n.SetNull()
+	return n
+}
+
+// Get retrieves the underlying value, if present, and returns an error if the value was not present
+func (t Value[T]) Get() (T, error) {
+	var empty T
+	if t.IsNull() {
+		return empty, errors.New("value is null")
+	}
+	if !t.IsSpecified() {
+		return empty, errors.New("value is not specified")
+	}
+	return t[true], nil
+}
+
+// MustGet retrieves the underlying value, if present, and panics if the value was not present
+func (t Value[T]) MustGet() T {
+	v, err := t.Get()
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+// Set sets the underlying value to a given value
+func (t *Value[T]) Set(value T) {
+	*t = map[bool]T{true: value}
+}
+
+// IsNull indicate whether the field was sent, and had a value of `null`
+func (t Value[T]) IsNull() bool {
+	_, foundNull := t[false]
+	return foundNull
+}
+
+// SetNull indicate that the field was sent, and had a value of `null`
+func (t *Value[T]) SetNull() {
+	var empty T
+	*t = map[bool]T{false: empty}
+}
+
+// IsSpecified indicates whether the field was sent
+func (t Value[T]) IsSpecified() bool {
+	return len(t) != 0
+}
+
+// SetUnspecified indicate whether the field was sent
+func (t *Value[T]) SetUnspecified() {
+	*t = map[bool]T{}
+}
+
+func (t Value[T]) MarshalJSON() ([]byte, error) {
+	// if field was specified, and `null`, marshal it
+	if t.IsNull() {
+		return []byte("null"), nil
+	}
+
+	// if field was unspecified, and `omitempty` is set on the field's tags, `json.Marshal` will omit this field
+
+	// otherwise: we have a value, so marshal it
+	return json.Marshal(t[true])
+}
+
+func (t *Value[T]) UnmarshalJSON(data []byte) error {
+	// if field is unspecified, UnmarshalJSON won't be called
+
+	// if field is specified, and `null`
+	if bytes.Equal(data, []byte("null")) {
+		t.SetNull()
+		return nil
+	}
+	// otherwise, we have an actual value, so parse it
+	var v T
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	t.Set(v)
+	return nil
 }
 
 // Get retrieves the underlying value, if present, and returns an error if the value was not present
