@@ -1,6 +1,6 @@
 module github.com/oapi-codegen/nullable/internal/test
 
-go 1.20
+go 1.24.0
 
 replace github.com/oapi-codegen/nullable => ../../
 
