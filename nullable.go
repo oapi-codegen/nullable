@@ -156,7 +156,15 @@ func (t Nullable[T]) Get() (T, error) {
 	return t[true], nil
 }
 
-// MustGet retrieves the underlying value, if present, and panics if the value was not present
+// Dig retrieves the underlying value or returns empty value if not present or was `null`. Use Get to distinguish between these cases.
+func (t Nullable[T]) GetOrEmpty() T {
+	var empty T
+	if !t.IsSpecified() || t.IsNull() {
+		return empty
+	}
+	return t[true]
+}
+
 func (t Nullable[T]) MustGet() T {
 	v, err := t.Get()
 	if err != nil {

@@ -1,24 +1,12 @@
-name: Build project
-on: [ push, pull_request ]
+name: CI
+on:
+  push: {}
+  pull_request: {}
+  workflow_dispatch: {}
+permissions:
+  contents: read
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      # perform matrix testing to give us an earlier insight into issues with different versions of supported major versions of Go
-      matrix:
-        version:
-          - "1.20"
-          - "1.21"
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Set up Go
-        uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5
-        with:
-          go-version: ${{ matrix.version }}
-
-      - name: Test
-        run: make test
+    uses: oapi-codegen/actions/.github/workflows/ci.yml@8ebfe4c83d051866a4af122ba602239fa3220e52 # v0.7.0
+    with:
+      lint_versions: '["1.25"]'
