@@ -79,6 +79,15 @@ func (t Value[T]) Get() (T, error) {
 	return t[true], nil
 }
 
+// GetOrEmpty retrieves the underlying value or returns empty value if not present or was `null`. Use Get to distinguish between these cases.
+func (t Value[T]) GetOrEmpty() T {
+	var empty T
+	if !t.IsSpecified() || t.IsNull() {
+		return empty
+	}
+	return t[true]
+}
+
 // MustGet retrieves the underlying value, if present, and panics if the value was not present
 func (t Value[T]) MustGet() T {
 	v, err := t.Get()

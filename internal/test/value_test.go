@@ -27,6 +27,7 @@ func TestValue(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "bar", value)
 	require.Equal(t, "bar", myObj.Foo.MustGet())
+	require.Equal(t, "bar", myObj.Foo.GetOrEmpty())
 	// serialize back to json: leads to the same data
 	require.Equal(t, data, serializeV(myObj, t))
 
@@ -39,6 +40,7 @@ func TestValue(t *testing.T) {
 	require.False(t, myObj.Foo.IsSpecified())
 	_, err = myObj.Foo.Get()
 	require.ErrorContains(t, err, "value is not specified")
+	require.Equal(t, "", myObj.Foo.GetOrEmpty())
 	// serialize back to json: leads to the same data
 	require.Equal(t, data, serializeV(myObj, t))
 
@@ -51,6 +53,7 @@ func TestValue(t *testing.T) {
 	require.True(t, myObj.Foo.IsSpecified())
 	_, err = myObj.Foo.Get()
 	require.ErrorContains(t, err, "value is null")
+	require.Equal(t, "", myObj.Foo.GetOrEmpty())
 	require.Panics(t, func() { myObj.Foo.MustGet() })
 	// serialize back to json: leads to the same data
 	require.Equal(t, data, serializeV(myObj, t))
@@ -82,6 +85,7 @@ func TestValueConstructors(t *testing.T) {
 	require.True(t, v.IsSpecified())
 	require.False(t, v.IsNull())
 	require.Equal(t, 123, v.MustGet())
+	require.Equal(t, 123, v.GetOrEmpty())
 
 	// NewNullValue sets an explicit null
 	n := nullable.NewNullValue[int]()
@@ -89,6 +93,7 @@ func TestValueConstructors(t *testing.T) {
 	require.True(t, n.IsNull())
 	_, err := n.Get()
 	require.ErrorContains(t, err, "value is null")
+	require.Equal(t, 0, n.GetOrEmpty())
 }
 
 func parseV(data string, t *testing.T) ObjV {
