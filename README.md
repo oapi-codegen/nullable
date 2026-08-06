@@ -33,18 +33,18 @@ go get github.com/oapi-codegen/nullable
 
 Check out the examples in [the package documentation on pkg.go.dev](https://pkg.go.dev/github.com/oapi-codegen/nullable) for more details.
 
-## Migration note
+## Naming note
 
-- `nullable.Nullable[T]` is still available but deprecated.
-- Prefer `nullable.Value[T]` going forward.
-- Constructors are provided for both:
+The type was originally called `Nullable[T]`, and is now called `Value[T]`. `Nullable[T]` remains available as a type alias, so the two are interchangeable — existing code keeps compiling, and you can pass a `Nullable[T]` anywhere a `Value[T]` is expected without a conversion.
+
+Both sets of constructors are available and do the same thing:
 
 ```go
 // Preferred
 n := nullable.NewValue(123)
 nNull := nullable.NewNullValue[int]()
 
-// Deprecated, still available
+// Original names, still supported
 o := nullable.NewNullableWithValue(123)
 oNull := nullable.NewNullNullable[int]()
 ```
